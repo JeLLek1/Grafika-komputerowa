@@ -19,7 +19,7 @@ void drawPoligon() {
 }
 
 // Funkcaja określająca, co ma być rysowane
-void RenderScene(void){
+void RenderScene(void) {
 
     // Czyszczenie okna aktualnym kolorem czyszczącym
     glClear(GL_COLOR_BUFFER_BIT);
@@ -44,7 +44,7 @@ void MyInit(void)
 /*************************************************************************************/
 
 // Funkcja służąca do kontroli zachowania proporcji rysowanych obiektów
-void ChangeSize(GLsizei horizontal, GLsizei vertical){
+void ChangeSize(GLsizei horizontal, GLsizei vertical) {
 
     // Deklaracja zmiennej AspectRatio określającej proporcję wymiarów okna
     GLfloat AspectRatio;
@@ -102,7 +102,7 @@ void keyNormalFunction(unsigned char key, int x, int y) {
     }
 }
 
-void main(void){
+void main(void) {
 
     // Ustawienie trybu wyświetlania
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
@@ -128,5 +128,3 @@ void main(void){
     // Funkcja uruchamia szkielet biblioteki GLUT
     glutMainLoop();
 }
-
-/*************************************************************************************/
