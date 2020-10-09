@@ -274,6 +274,8 @@ void keyNormalFunction(unsigned char key, int x, int y) {
 }
 
 int main() {
+    //inicjalizacja ziarna liczb psedolosowych
+    srand(time(NULL));
 
     // Ustawienie trybu wyświetlania
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
