@@ -5,6 +5,9 @@ Obsługa programu:
 [strzałki] - przesuwanie pozycji fraktalu
 [a/d] - zmiana poziomu perturbacji
 [w/s] - zmiana poziomu rystowania fraktalu
+w przypadku niepowodzenia (za dużej ilości elementów) komunikat pokaże sie w konsoli
+u mnie to jest 7 poziom (trzymam w liście elementy, żeby módz nimi swobodnie manipulować (powiększać, przesuwać), zmniejsza to nieco ilość
+możliwych do wyrysowania elementów, jednak bez tej funckji i tak nibyłyby widoczne.
 */
 
 #include <windows.h>
@@ -15,7 +18,8 @@ Obsługa programu:
 #include <stdio.h>
 #include <stdarg.h> 
 #include <list> 
-#include <iterator> 
+#include <iterator>
+#include <new>
 #include "settings.h"
 #include "SierpinskiCarpet.h"
 
@@ -38,12 +42,19 @@ static GLfloat size = CARPET_SIZE;
 void carpetInit() {
     if (carpet != nullptr) {
         delete carpet;
+        carpet = nullptr;
     }
-    //tworzenie dywanu Sierpińskiego według danych defaultowych
-    carpet = new SierpinskiCarpet(CARPET_X, CARPET_Y, CARPET_SIZE, last_level,noise);
-    //przybliżenie według aktualnych ustawień
-    carpet->zoom(size - CARPET_SIZE);
-    carpet->moov(pos_x, pos_y);
+    try {
+        //tworzenie dywanu Sierpińskiego według danych defaultowych
+        carpet = new SierpinskiCarpet(CARPET_X, CARPET_Y, CARPET_SIZE, last_level, noise);
+        //przybliżenie według aktualnych ustawień
+        carpet->zoom(size - CARPET_SIZE);
+        carpet->moov(pos_x, pos_y);
+    }
+    catch (const std::bad_alloc&) {
+        printf("Poziom %u jest za duzy i nie miesci sie w pamieci \n", last_level);
+        exit(0);
+    }
 }
 
 //generowanie pseudolosowej liczby zmiennoprzecinkowej <0;1> lub <-1;1>
