@@ -61,12 +61,12 @@ GLfloat randGLfloat(bool negative = false) {
 //zwaraca współczynnik perturbacji zależny od wielkości i poziomu fraktalu
 GLfloat calculateNoiseFactor() {
     //obliczanie ilości elementów w linii
-    unsigned long long count = 3;
+    GLfloat count = 3;
     for (size_t i = 0; i < last_level; i++) {
-        count *= 3;
+        count *= 3.f;
     }
     //wyliczanie współczynnika
-    return (size / (CARPET_SIZE * static_cast<GLfloat>(count))) * noise;
+    return (size / (CARPET_SIZE * count)) * noise;
 }
 
 //obliczenie perturbacji punktu z uwzględnieniem głebokości fraktalu
