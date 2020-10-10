@@ -5,6 +5,8 @@ Obsługa programu:
 [strzałki] - przesuwanie pozycji fraktalu
 [a/d] - zmiana poziomu perturbacji
 [w/s] - zmiana poziomu rystowania fraktalu
+
+w settings.h można również ustawić test, czy dany element ma w ogóle możliwość bycia widocznym. Więcej w settings.h
 */
 
 #include <windows.h>
@@ -37,6 +39,10 @@ static time_t seed = 0;
 //współczynnik perturbacji zależny od odległośi i wielkości fraktalu
 static GLfloat noise_factor = 0;
 
+//aktualne wpspółczynniki ekranu
+static GLfloat screenWidth = 0.f;
+static GLfloat screenHeight = 0.f;
+
 //generowanie pseudolosowej liczby zmiennoprzecinkowej <0;1> lub <-1;1>
 GLfloat randGLfloat(bool negative = false) {
     if(negative)
@@ -55,20 +61,22 @@ GLfloat calculateNoiseFactor() {
         count *= 3;
     }
     //wyliczanie współczynnika
-    return size / (CARPET_SIZE * static_cast<GLfloat>(count));
+    return (size / (CARPET_SIZE * static_cast<GLfloat>(count))) * noise;
 }
 
 //obliczenie perturbacji punktu z uwzględnieniem głebokości fraktalu
 GLfloat calculateNoise(GLfloat cord) {
 
     //losowanie przesunięcia w uwzględnieniem ustawień i wielkosci fraktalu
-    cord += randGLfloat(true) * noise * noise_factor;
+    cord += randGLfloat(true) * noise_factor;
     return cord;
 }
 
 void drawPerturbatedPolygon(GLfloat x, GLfloat y, GLfloat size) {
     //rozpoczęcie rysowania poligonu
     glBegin(GL_POLYGON);
+        //ustawienie koloru losowego
+        glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
         //ustawianie punktu 1 z uwzględnieniem noise i wielkością kwadratu
         glVertex2f(calculateNoise(x), calculateNoise(y));
         //ustawienie koloru losowego
@@ -83,10 +91,17 @@ void drawPerturbatedPolygon(GLfloat x, GLfloat y, GLfloat size) {
         glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
         //ustawianie punktu 4 z uwzględnieniem noise i wielkością kwadratu
         glVertex2f(calculateNoise(x), calculateNoise(y + size));
-        //ustawienie koloru losowego
-        glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
     //zakończenie rysowania poligonu
     glEnd();
+}
+
+//test czy dany element ma możliwość bycia widocznym na ekranie
+bool testIfNotVisible(GLfloat x, GLfloat y, GLfloat size) {
+    if ((x + size) + noise_factor < -screenWidth || x - noise_factor > screenWidth
+        || (y + size) + noise_factor < -screenHeight || y - noise_factor > screenHeight) {
+        return true;
+    }
+    return false;
 }
 
 //Rysowanie poligonu z podanych punktów o podanej ilości punktów
@@ -103,6 +118,12 @@ void drawSierpinskiCarpet(GLfloat x, GLfloat y, GLfloat size, size_t depth) {
             //wyznaczanie pozycji lewego górnego wierzchołku na podstawie danych o pozycji rysowania i długości
             GLfloat xNew = x + sizeNew * horizontal;
             GLfloat yNew = y + sizeNew * vertical;
+
+//opcja sprawdzania, czy element powinien być rysowany. Więcej w settings.h
+#if CHECK_IF_VISIBLE == true
+            //jeżeli element nie ma moliwości wyświetlenia na ekranie to jego rysowanie jest pomijane
+            if (testIfNotVisible(xNew, yNew, sizeNew)) continue;
+#endif
 
             if (depth > 1) {
                 //jeżeli nie jest to ostatni poziom wchodzi w rekurencje z danymi o pozycji i zmniejszonej wielkości
@@ -203,10 +224,16 @@ void ChangeSize(GLsizei horizontal, GLsizei vertical) {
     // Do określenia okna obserwatora służy funkcja glOrtho(...)
     // ustawienie aspect ration do odwołania dla testu czy element jest widoczny
     if (horizontal <= vertical) {
-        glOrtho(-100.0, 100.0, -100.0 / AspectRatio, 100.0 / AspectRatio, 1.0, -1.0);
+        //zapisywanie współczynników ekranu
+        screenWidth = 100.0;
+        screenHeight = 100.0 / AspectRatio;
+        glOrtho(-screenWidth, screenWidth, -screenHeight, screenHeight, 1.0, -1.0);
     }
     else {
-        glOrtho(-100.0 * AspectRatio, 100.0 * AspectRatio, -100.0, 100.0, 1.0, -1.0);
+        //zapisywanie współczynników ekranu
+        screenWidth = 100.0 * AspectRatio;
+        screenHeight = 100.0;
+        glOrtho(-screenWidth, screenWidth, -screenHeight, screenHeight, 1.0, -1.0);
     }
 
     // Określenie układu współrzędnych    
