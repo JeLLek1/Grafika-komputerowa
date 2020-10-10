@@ -9,6 +9,8 @@ Obsługa programu:
         pozwala na generowanie dużych struktur po odpowiednim przybliżeniu
         jednak z powodu tego że perturbacje i kolor są losowe na podstawie ziarna
         pomijanie wyświetlania elementów może powodować zmianę tych wartości podczas przybliżania/przesuwania
+[f11] - pełny ekran
+[esc] - wyjście
 */
 
 #include <windows.h>

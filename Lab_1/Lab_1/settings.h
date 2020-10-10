@@ -1,32 +1,32 @@
-#pragma once
+Ôªø#pragma once
 #include <string>
 #include <windows.h>
 #include <gl/GL.h>
 
-//domyúlne ustawienia ekrany
+//domy≈õlne ustawienia ekrany
 const int WINDOW_X = 0;
 const int WINDOW_Y = 0;
 const int WINDOW_SIZE = 1900;
 const int WINDOW_HEIGHT = 1000;
 
-//domyúlne przybliøenie i krok podczas zmiany
+//domy≈õlne przybli≈ºenie i krok podczas zmiany
 const GLfloat DEF_ZOOM = 50.f;
 const GLfloat DEF_STEP_ZOOM = 3.f;
 
-//domyúlny poziom kroku poruszania strza≥kami i poczπtkowe ustawienia pozycji
+//domy≈õlny poziom kroku poruszania strza≈Çkami i poczƒÖtkowe ustawienia pozycji
 const GLfloat DEF_STEP_MOOV = 3.f;
 const GLfloat CARPET_X = -50.f;
 const GLfloat CARPET_Y = -50.f;
 const GLfloat CARPET_SIZE = 100.f;
 
-//domyúlna parturbacja, krok podczas zmiany
+//domy≈õlna parturbacja, krok podczas zmiany
 const GLfloat DEF_NOISE = 0.0f;
 const GLfloat DEF_NOISE_STEP = 2.5f;
 
-//domyúlny poziom fraktalu
+//domy≈õlny poziom fraktalu
 const size_t DEF_LEVEL = 4;
 
-//pomijanie wyúwietlania nieaktywnych lelementÛw
+//pomijanie wy≈õwietlania nieaktywnych lelement√≥w
 const bool DEF_SHOW_VISIBLE = false;
 
 //nazwa aplikacji
