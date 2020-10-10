@@ -5,8 +5,10 @@ Obsługa programu:
 [strzałki] - przesuwanie pozycji fraktalu
 [a/d] - zmiana poziomu perturbacji
 [w/s] - zmiana poziomu rystowania fraktalu
-
-w settings.h można również ustawić test, czy dany element ma w ogóle możliwość bycia widocznym. Więcej w settings.h
+[p] -   czy wyświetlać tylko widoczne elementy na ekranie
+        pozwala na generowanie dużych struktur po odpowiednim przybliżeniu
+        jednak z powodu tego że perturbacje i kolor są losowe na podstawie ziarna
+        pomijanie wyświetlania elementów może powodować zmianę tych wartości podczas przybliżania/przesuwania
 */
 
 #include <windows.h>
@@ -42,6 +44,9 @@ static GLfloat noise_factor = 0;
 //aktualne wpspółczynniki ekranu
 static GLfloat screenWidth = 0.f;
 static GLfloat screenHeight = 0.f;
+
+//czy pomijanie wyświetlania elementów niewidocznych jest aktywne
+static bool show_visible = DEF_SHOW_VISIBLE;
 
 //generowanie pseudolosowej liczby zmiennoprzecinkowej <0;1> lub <-1;1>
 GLfloat randGLfloat(bool negative = false) {
@@ -119,11 +124,9 @@ void drawSierpinskiCarpet(GLfloat x, GLfloat y, GLfloat size, size_t depth) {
             GLfloat xNew = x + sizeNew * horizontal;
             GLfloat yNew = y + sizeNew * vertical;
 
-//opcja sprawdzania, czy element powinien być rysowany. Więcej w settings.h
-#if CHECK_IF_VISIBLE == true
             //jeżeli element nie ma moliwości wyświetlenia na ekranie to jego rysowanie jest pomijane
-            if (testIfNotVisible(xNew, yNew, sizeNew)) continue;
-#endif
+            //tylko jeżeli taka opcja jest włączona
+            if (show_visible && testIfNotVisible(xNew, yNew, sizeNew)) continue;
 
             if (depth > 1) {
                 //jeżeli nie jest to ostatni poziom wchodzi w rekurencje z danymi o pozycji i zmniejszonej wielkości
@@ -161,8 +164,10 @@ void drawGui() {
     display_setting_text(-100.f, 90.f, "Poziom zniekształcenia: %1.1f", noise);
     //ifnrmacja o ilości poziomów
     display_setting_text(-100.f, 85.f, "Poziomy fraktalu: %u", last_level);
+    //Iformacja o tym, czy pomijać niewidoczne elementy
+    display_setting_text(-100.f, -85.f, "Pomijac niewidoczne: %s", (show_visible) ? "T": "N");
     //Iformacja o przyciskach
-    display_setting_text(-100.f, -90.f, "Dostepne klawisze: [w,a,s,d,+,-,(arrows)]");
+    display_setting_text(-100.f, -90.f, "Dostepne klawisze: [w,a,s,d,p,+,-,(arrows)]");
 }
 
 // Funkcaja określająca, co ma być rysowane
@@ -309,6 +314,10 @@ void keyNormalFunction(unsigned char key, int x, int y) {
             if (last_level > 1) {
                 last_level--;
             }
+            break;
+        case 112:
+            //zmiana trybu wyświetlania elementów
+            show_visible = !show_visible;
             break;
         case 27:
             //wyjście z programu esc
