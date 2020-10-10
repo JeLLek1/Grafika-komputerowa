@@ -161,13 +161,13 @@ void display_setting_text(GLfloat x, GLfloat y, const char *string, ...) {
 //rysowanie gui
 void drawGui() {
     //informacja o perturbacjach
-    display_setting_text(-100.f, 90.f, "Poziom zniekształcenia: %1.1f", noise);
+    display_setting_text(-screenWidth + 10.f, screenHeight - 10.f, "Poziom zniekształcenia: %1.1f", noise);
     //ifnrmacja o ilości poziomów
-    display_setting_text(-100.f, 85.f, "Poziomy fraktalu: %u", last_level);
+    display_setting_text(-screenWidth + 10.f, screenHeight - 15.f, "Poziomy fraktalu: %u", last_level);
     //Iformacja o tym, czy pomijać niewidoczne elementy
-    display_setting_text(-100.f, -85.f, "Pomijac niewidoczne: %s", (show_visible) ? "T": "N");
+    display_setting_text(-screenWidth + 10.f, - screenHeight + 15.f, "Pomijac niewidoczne: %s", (show_visible) ? "T": "N");
     //Iformacja o przyciskach
-    display_setting_text(-100.f, -90.f, "Dostepne klawisze: [w,a,s,d,p,+,-,(arrows)]");
+    display_setting_text(-screenWidth + 10.f, -screenHeight + 10.f, "Dostepne klawisze: [w,a,s,d,p,+,-,(arrows)]");
 }
 
 // Funkcaja określająca, co ma być rysowane
