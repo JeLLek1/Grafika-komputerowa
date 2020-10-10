@@ -11,6 +11,9 @@ Obsługa programu:
         pomijanie wyświetlania elementów może powodować zmianę tych wartości podczas przybliżania/przesuwania
 [f11] - pełny ekran
 [esc] - wyjście
+
+przybliżanie jest na lewy dolny róg, ponieważ przy próbie wyśrodkowania przybliżania okazało się że o wiele szybciej przepełnia
+zmienne pozycji, dlatego w ten sposób można osiągnąć więcej poziomów
 */
 
 #include <windows.h>
