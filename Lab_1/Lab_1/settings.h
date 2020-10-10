@@ -21,7 +21,7 @@ const GLfloat CARPET_SIZE = 100.f;
 
 //domyœlna parturbacja, krok podczas zmiany
 const GLfloat DEF_NOISE = 0.0f;
-const GLfloat DEF_NOISE_STEP = 0.1f;
+const GLfloat DEF_NOISE_STEP = .5f;
 
 //domyœlny poziom fraktalu
 const size_t DEF_LEVEL = 4;

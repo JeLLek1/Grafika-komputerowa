@@ -32,10 +32,13 @@ static size_t last_level = DEF_LEVEL;
 static GLfloat size = CARPET_SIZE;
 
 //seed zapamiętany, aby nie zmieniały się elementy podczas przerysowania
-time_t seed = 0;
+static time_t seed = 0;
+
+//współczynnik perturbacji zależny od odległośi i wielkości fraktalu
+static GLfloat noise_factor = 0;
 
 //generowanie pseudolosowej liczby zmiennoprzecinkowej <0;1> lub <-1;1>
-float randGLfloat(bool negative = false) {
+GLfloat randGLfloat(bool negative = false) {
     if(negative)
         //liczba pseudolosowa z przedziału <-1;1>
         return static_cast <GLfloat> (rand() * 2) / static_cast <GLfloat> (RAND_MAX) - 1.f;
@@ -44,23 +47,42 @@ float randGLfloat(bool negative = false) {
         return static_cast <GLfloat> (rand()) / static_cast <GLfloat> (RAND_MAX);
 }
 
+//zwaraca współczynnik perturbacji zależny od wielkości i poziomu fraktalu
+GLfloat calculateNoiseFactor() {
+    //obliczanie ilości elementów w linii
+    unsigned long long count = 3;
+    for (size_t i = 0; i < last_level; i++) {
+        count *= 3;
+    }
+    //wyliczanie współczynnika
+    return size / (CARPET_SIZE * static_cast<GLfloat>(count));
+}
+
+//obliczenie perturbacji punktu z uwzględnieniem głebokości fraktalu
+GLfloat calculateNoise(GLfloat cord) {
+
+    //losowanie przesunięcia w uwzględnieniem ustawień i wielkosci fraktalu
+    cord += randGLfloat(true) * noise * noise_factor;
+    return cord;
+}
+
 void drawPerturbatedPolygon(GLfloat x, GLfloat y, GLfloat size) {
     //rozpoczęcie rysowania poligonu
     glBegin(GL_POLYGON);
         //ustawianie punktu 1 z uwzględnieniem noise i wielkością kwadratu
-        glVertex2f(x + randGLfloat(true) * noise, y + randGLfloat(true) * noise);
+        glVertex2f(calculateNoise(x), calculateNoise(y));
         //ustawienie koloru losowego
         glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
         //ustawianie punktu 2 z uwzględnieniem noise i wielkością kwadratu
-        glVertex2f(x + size + randGLfloat(true) * noise, y + randGLfloat(true) * noise);
+        glVertex2f(calculateNoise(x + size),  calculateNoise(y));
         //ustawienie koloru losowego
         glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
         //ustawianie punktu 3 z uwzględnieniem noise i wielkością kwadratu
-        glVertex2f(x + size + randGLfloat(true) * noise, y + size + randGLfloat(true) * noise);
+        glVertex2f(calculateNoise(x + size),calculateNoise(y + size));
         //ustawienie koloru losowego
         glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
         //ustawianie punktu 4 z uwzględnieniem noise i wielkością kwadratu
-        glVertex2f(x + randGLfloat(true) * noise, y + size + randGLfloat(true) * noise);
+        glVertex2f(calculateNoise(x), calculateNoise(y + size));
         //ustawienie koloru losowego
         glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
     //zakończenie rysowania poligonu
@@ -126,6 +148,8 @@ void drawGui() {
 void RenderScene(void) {
     //ustawenie seedu aby podczas przerysowania nie zmieniać wyglądu fraktalu
     srand(seed);
+    //obliczanie wspołczynnika zaszumienia na podstawie aktyalnych ustawień
+    noise_factor = calculateNoiseFactor();
 
     // Czyszczenie okna aktualnym kolorem czyszczącym
     glClear(GL_COLOR_BUFFER_BIT);
@@ -146,7 +170,7 @@ void MyInit()
 {
     // Kolor okna wnętrza okna - ustawiono na czarny
     glClearColor(0.f, 0.f, 0.f, 1.0f);
-    //zapamiętanie seedu
+    //zapamiętanie seedu podczas inizjalizacji programu
     seed = time(NULL);
 }
 
@@ -232,11 +256,11 @@ void keyNormalFunction(unsigned char key, int x, int y) {
     switch (key) {
         case 43:
             //powiększenie [+]
-            size += DEF_STEP_ZOOM;
+            size += DEF_STEP_ZOOM * (size/DEF_ZOOM);
             break;
         case 45:
             //pomniejszenie [-]
-            size -= DEF_STEP_ZOOM;
+            size -= DEF_STEP_ZOOM * (size / DEF_ZOOM);
             break;
         case 97:
             //zwiększenie poziomu parturbacji [d]
