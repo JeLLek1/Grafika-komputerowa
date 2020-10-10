@@ -148,15 +148,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Lab_1.cpp" />
-    <ClCompile Include="Point.cpp" />
-    <ClCompile Include="SierpinskiCarpet.cpp" />
-    <ClCompile Include="Square.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="globFunc.h" />
-    <ClInclude Include="Point.h" />
     <ClInclude Include="settings.h" />
-    <ClInclude Include="SierpinskiCarpet.h" />
     <ClInclude Include="Square.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

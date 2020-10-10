@@ -5,9 +5,6 @@ Obsługa programu:
 [strzałki] - przesuwanie pozycji fraktalu
 [a/d] - zmiana poziomu perturbacji
 [w/s] - zmiana poziomu rystowania fraktalu
-w przypadku niepowodzenia (za dużej ilości elementów) komunikat pokaże sie w konsoli
-u mnie to jest 7 poziom (trzymam w liście elementy, żeby módz nimi swobodnie manipulować (powiększać, przesuwać), zmniejsza to nieco ilość
-możliwych do wyrysowania elementów, jednak bez tej funckji i tak nibyłyby widoczne.
 */
 
 #include <windows.h>
@@ -21,41 +18,21 @@ możliwych do wyrysowania elementów, jednak bez tej funckji i tak nibyłyby wid
 #include <iterator>
 #include <new>
 #include "settings.h"
-#include "SierpinskiCarpet.h"
 
 //stan okna
 static bool is_fullscrean = false;
 //pozycja względna fraktalu
-static GLfloat pos_x = 0.f;
-static GLfloat pos_y = 0.f;
+static GLfloat pos_x = CARPET_X;
+static GLfloat pos_y = CARPET_Y;
 //poziom perturbacji
 static GLfloat noise = DEF_NOISE;
 //poziom fraktalu
 static size_t last_level = DEF_LEVEL;
-//wskaźnik klasy dywanu Sierpińskiego
-static SierpinskiCarpet* carpet = nullptr;
 //przybliżenie fraktalu
 static GLfloat size = CARPET_SIZE;
 
-//inicjalizacja/reinicjalizacja dywanu Sierpińskiego
-//reinicjalizacja następuje gdy następuje zmiana parametrów (poziom,perturbacje)
-void carpetInit() {
-    if (carpet != nullptr) {
-        delete carpet;
-        carpet = nullptr;
-    }
-    try {
-        //tworzenie dywanu Sierpińskiego według danych defaultowych
-        carpet = new SierpinskiCarpet(CARPET_X, CARPET_Y, CARPET_SIZE, last_level, noise);
-        //przybliżenie według aktualnych ustawień
-        carpet->zoom(size - CARPET_SIZE);
-        carpet->moov(pos_x, pos_y);
-    }
-    catch (const std::bad_alloc&) {
-        printf("Poziom %u jest za duzy i nie miesci sie w pamieci \n", last_level);
-        exit(0);
-    }
-}
+//seed zapamiętany, aby nie zmieniały się elementy podczas przerysowania
+time_t seed = 0;
 
 //generowanie pseudolosowej liczby zmiennoprzecinkowej <0;1> lub <-1;1>
 float randGLfloat(bool negative = false) {
@@ -67,23 +44,53 @@ float randGLfloat(bool negative = false) {
         return static_cast <GLfloat> (rand()) / static_cast <GLfloat> (RAND_MAX);
 }
 
-//Rysowanie poligonu z podanych punktów o podanej ilości punktów
-void drawSierpinskiCarpet() {
+void drawPerturbatedPolygon(GLfloat x, GLfloat y, GLfloat size) {
+    //rozpoczęcie rysowania poligonu
+    glBegin(GL_POLYGON);
+        //ustawianie punktu 1 z uwzględnieniem noise i wielkością kwadratu
+        glVertex2f(x + randGLfloat(true) * noise, y + randGLfloat(true) * noise);
+        //ustawienie koloru losowego
+        glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
+        //ustawianie punktu 2 z uwzględnieniem noise i wielkością kwadratu
+        glVertex2f(x + size + randGLfloat(true) * noise, y + randGLfloat(true) * noise);
+        //ustawienie koloru losowego
+        glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
+        //ustawianie punktu 3 z uwzględnieniem noise i wielkością kwadratu
+        glVertex2f(x + size + randGLfloat(true) * noise, y + size + randGLfloat(true) * noise);
+        //ustawienie koloru losowego
+        glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
+        //ustawianie punktu 4 z uwzględnieniem noise i wielkością kwadratu
+        glVertex2f(x + randGLfloat(true) * noise, y + size + randGLfloat(true) * noise);
+        //ustawienie koloru losowego
+        glColor3f(randGLfloat(), randGLfloat(), randGLfloat());
+    //zakończenie rysowania poligonu
+    glEnd();
+}
 
-    //Dla wszystkich kwadratów
-    std::list <Square*> ::iterator it;
-    for (it = carpet->squares->begin(); it != carpet->squares->end(); ++it) {
-        //rozpoczęcie rysowania poligonu
-        glBegin(GL_POLYGON);
-        //dla każdego punktu z tablicy pt
-        for (size_t j = 0; j < 4; j++) {
-            //Ustawianie koloru wierzchołka
-            glColor3f((*it)->points[j]->r, (*it)->points[j]->g, (*it)->points[j]->b);
-            //Wyświetlanie wierzchołka i perturbacje według aktualnych ustawień programu
-            glVertex2f((*it)->points[j]->x, (*it)->points[j]->y);
+//Rysowanie poligonu z podanych punktów o podanej ilości punktów
+void drawSierpinskiCarpet(GLfloat x, GLfloat y, GLfloat size, size_t depth) {
+    //nowa wielkość kwadratu
+    GLfloat sizeNew = size / 3.f;
+    //dla 3 pozycji poziomo
+    for (size_t horizontal = 0; horizontal < 3; horizontal++) {
+        //dla 3 pozycji pionowo
+        for (size_t vertical = 0; vertical < 3; vertical++) {
+            //jeżeli środek to pomija rysowanie
+            if (horizontal == 1 && vertical == 1) continue;
+
+            //wyznaczanie pozycji lewego górnego wierzchołku na podstawie danych o pozycji rysowania i długości
+            GLfloat xNew = x + sizeNew * horizontal;
+            GLfloat yNew = y + sizeNew * vertical;
+
+            if (depth > 1) {
+                //jeżeli nie jest to ostatni poziom wchodzi w rekurencje z danymi o pozycji i zmniejszonej wielkości
+                drawSierpinskiCarpet(xNew, yNew, sizeNew, depth - 1);
+            }
+            else {
+                //Ostatni poziom - rysowanie poligonu
+                drawPerturbatedPolygon(xNew, yNew, sizeNew);
+            }
         }
-        //zakończenie rysowania poligonu
-        glEnd();
     }
 }
 
@@ -117,12 +124,15 @@ void drawGui() {
 
 // Funkcaja określająca, co ma być rysowane
 void RenderScene(void) {
+    //ustawenie seedu aby podczas przerysowania nie zmieniać wyglądu fraktalu
+    srand(seed);
 
     // Czyszczenie okna aktualnym kolorem czyszczącym
     glClear(GL_COLOR_BUFFER_BIT);
 
     //wywołanie metody rysującej dywan
-    drawSierpinskiCarpet();
+    drawSierpinskiCarpet(pos_x, pos_y, size, last_level);
+
     //rysowanie gui
     drawGui();
 
@@ -136,8 +146,8 @@ void MyInit()
 {
     // Kolor okna wnętrza okna - ustawiono na czarny
     glClearColor(0.f, 0.f, 0.f, 1.0f);
-    //inicjalizacja dywanu sierpińskiego
-    carpetInit();
+    //zapamiętanie seedu
+    seed = time(NULL);
 }
 
 // Funkcja służąca do kontroli zachowania proporcji rysowanych obiektów
@@ -198,22 +208,18 @@ void keySpecialFunction(int key, int x, int y) {
         break;
     case GLUT_KEY_DOWN:
         //przesunięcie fraktalu w górę
-        carpet->moov(0, DEF_STEP_MOOV);
         pos_y += DEF_STEP_MOOV;
         break;
     case GLUT_KEY_UP:
         //przesunięcie fraktalu w dół
-        carpet->moov(0, -DEF_STEP_MOOV);
         pos_y -= DEF_STEP_MOOV;
         break;
     case GLUT_KEY_LEFT:
         //przesunięcie fraktalu w prawo
-        carpet->moov(DEF_STEP_MOOV, 0);
         pos_x += DEF_STEP_MOOV;
         break;
     case GLUT_KEY_RIGHT:
         //przesunięcie fraktalu w lewo
-        carpet->moov(-DEF_STEP_MOOV, 0);
         pos_x -= DEF_STEP_MOOV;
         break;
     }
@@ -226,43 +232,31 @@ void keyNormalFunction(unsigned char key, int x, int y) {
     switch (key) {
         case 43:
             //powiększenie [+]
-            carpet->zoom(DEF_STEP_ZOOM);
-            //w zmiennych pomocniczyć należy przetworzyć proporcje nowego zoomu dla pozycji, żeby po ewentualnej reinicjalizacji dało się odczytać starą pozycję
-            size += size/100.f * DEF_STEP_ZOOM;
-            pos_x += pos_x / 100.f * DEF_STEP_ZOOM;
-            pos_y += pos_y / 100.f * DEF_STEP_ZOOM;
+            size += DEF_STEP_ZOOM;
             break;
         case 45:
             //pomniejszenie [-]
-            carpet->zoom(-DEF_STEP_ZOOM);
-            //w zmiennych pomocniczyć należy przetworzyć proporcje nowego zoomu dla pozycji, żeby po ewentualnej reinicjalizacji dało się odczytać starą pozycję
-            size -= size / 100.f * DEF_STEP_ZOOM;
-            pos_x -= pos_x / 100.f * DEF_STEP_ZOOM;
-            pos_y -= pos_y / 100.f * DEF_STEP_ZOOM;
+            size -= DEF_STEP_ZOOM;
             break;
         case 97:
             //zwiększenie poziomu parturbacji [d]
             if (noise > 0.f) {
                 noise -= DEF_NOISE_STEP;
                 if (noise < 0.f) noise = 0.f;
-                carpetInit();
             }
             break;
         case 100:
             //zmniejszenie poziomu parturbacji [a]
             noise += DEF_NOISE_STEP;
-            carpetInit();
             break;
         case 119:
             //zwiększenie poziomu fraktalu [w]
             last_level++;
-            carpetInit();
             break;
         case 115:
             //zmniejszenie poziomu fraktalu [s]
             if (last_level > 1) {
                 last_level--;
-                carpetInit();
             }
             break;
         case 27:
@@ -274,8 +268,6 @@ void keyNormalFunction(unsigned char key, int x, int y) {
 }
 
 int main() {
-    //inicjalizacja ziarna liczb psedolosowych
-    srand(time(NULL));
 
     // Ustawienie trybu wyświetlania
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
