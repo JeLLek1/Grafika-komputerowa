@@ -23,9 +23,6 @@ const GLfloat CARPET_SIZE = 100.f;
 const GLfloat DEF_NOISE = 0.0f;
 const GLfloat DEF_NOISE_STEP = 2.5f;
 
-//domyślny poziom fraktalu
-const size_t DEF_LEVEL = 4;
-
 //pomijanie wyświetlania nieaktywnych lelementów
 const bool DEF_SHOW_VISIBLE = false;
 

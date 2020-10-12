@@ -36,7 +36,7 @@ static GLfloat pos_y = CARPET_Y;
 //poziom perturbacji
 static GLfloat noise = DEF_NOISE;
 //poziom fraktalu
-static size_t last_level = DEF_LEVEL;
+static size_t last_level = 0;
 //przybliżenie fraktalu
 static GLfloat size = CARPET_SIZE;
 
@@ -333,6 +333,18 @@ void keyNormalFunction(unsigned char key, int x, int y) {
 }
 
 int main() {
+    //pobranie poczatkowej wielkosci dywanu
+    printf("Podaj poczatkowa wielkosc dywanu: ");
+    scanf_s("%u", &last_level);
+    //jeżeli nie udało się pobrać wartości
+    while (last_level < 1) {
+        //pobranie wszystkich wprowadzonych znakow
+        char c;
+        while ((c = getchar() != '\n') && c!= EOF);
+        //wczytywanie ponownie
+        printf("Podano nieprawidlowa wartosc, sprobuj ponownie: ");
+        scanf_s("%u", &last_level);
+    }
 
     // Ustawienie trybu wyświetlania
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
