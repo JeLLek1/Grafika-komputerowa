@@ -151,7 +151,7 @@
     <ClCompile Include="Egg.cpp" />
     <ClCompile Include="EggSystem.cpp" />
     <ClCompile Include="Lab_2.cpp" />
-    <ClCompile Include="Vector2f.cpp" />
+    <ClCompile Include="Vector3f.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />

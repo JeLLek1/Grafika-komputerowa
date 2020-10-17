@@ -24,6 +24,6 @@ const RotationDirection DEF_ROTATION_DIRECTION = RotationDirection::PAUSE;
 const GLfloat DEF_ROTATION_STEP = 25.f;
 
 //minimalna iloœæ punktów g³ównego jajka
-const size_t MIN_EGG_POINT_COUNT = 30;
+const size_t MIN_EGG_POINT_COUNT = 20;
 //mno¿nik iloœci punktow drugiejgo jajka
-const float SMALL_EGG_MULTIPLIER = 0.1;
+const float SMALL_EGG_MULTIPLIER = 0.2;
