@@ -48,6 +48,8 @@ public:
 	static GLfloat randGLfloat(bool negative = false);
 	//aktualizacja pozycji i statusów wszystkich elementów
 	void update();
+	//metoda inicjuj¹ca elementy wyœwietlane
+	void init();
 	//destruktor
 	~App();
 };

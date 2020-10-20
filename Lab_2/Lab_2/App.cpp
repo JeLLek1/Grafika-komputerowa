@@ -44,30 +44,13 @@ App::App() {
     glutKeyboardFunc(App::handelInputKey);
     //funckja wywo³ywana gdy nie ma ¿adnych eventów
     glutIdleFunc(App::idleFunction);
-    //czyszczenie ekranu
+    //kolor czyszcz¹cy ekran
     glClearColor(0.f, 0.f, 0.f, 1.0f);
 
     // W³¹czenie mechanizmu usuwania powierzchni niewidocznych
     glEnable(GL_DEPTH_TEST);
 
-    //ustawienie wartoœci pocz¹tkowej odstêpu czasu
-    App::dt = 0.f;
-    //ustawienie wartoœci czasu ostatniej klatki
-    this->lastTime = std::chrono::high_resolution_clock::now();
-    //stworzenie nowego jajka (iloœæ szegó³ó, pozycja, wielkoœæ)
-    Egg* egg = new Egg(this->resolution_main, Vector3f(0.f, -3.f, 0.f), Vector3f(0.8f, 0.8f, 0.8f));
-    //ustawienie koloru jaka
-    egg->setColor(Egg::ColorType::Random);
-    //stwoenie "systemu" z centrum jako podane jajko 
-    this->mainSystem = new EggSystem(egg, 0.f, 0.f, 0.f);
-    //stworzenie jajka obracaj¹cego siê w okó³ g³ównego jajka 
-    egg = new Egg(static_cast<size_t>(this->resolution_main*SMALL_EGG_MULTIPLIER), Vector3f(0.f, -1.f, 0.f), Vector3f(0.3f, 0.3f, 0.3f));
-    //ustawienie koloru
-    egg->setColor(Egg::ColorType::Green);
-    //stworzenie systemu w którym jajko siê znajduje (jajko, promieñ, obrót wokó³ w³asnej osi na sekundê, obrót w okó³ promienia na sekundê) i dodanie go do listy systemów g³ównego systemu
-    this->mainSystem->push(new EggSystem(egg, 7.f, -40.f, 10.f));
-
-    //w zwi¹zku z sposobem, w jaki s¹ tworzone systemy jajek i jaka, mo¿liwe jest dodanie wielu systemów w wielu systemach, które kr¹¿¹ w okó³ siebie
+    this->init();
 }
 //pobranie instancji singletonu
 App* App::getInstance()
@@ -261,6 +244,27 @@ void App::update()
         app->currentRotation += Vector3f(0.f, DEF_ROTATION_STEP * app->dt);
         break;
     }
+}
+void App::init()
+{
+    //ustawienie wartoœci pocz¹tkowej odstêpu czasu
+    App::dt = 0.f;
+    //ustawienie wartoœci czasu ostatniej klatki
+    this->lastTime = std::chrono::high_resolution_clock::now();
+    //stworzenie nowego jajka (iloœæ szegó³ó, pozycja, wielkoœæ)
+    Egg* egg = new Egg(this->resolution_main, Vector3f(0.f, -3.f, 0.f), Vector3f(0.8f, 0.8f, 0.8f));
+    //ustawienie koloru jaka
+    egg->setColor(Egg::ColorType::Random);
+    //stwoenie "systemu" z centrum jako podane jajko 
+    this->mainSystem = new EggSystem(egg, 0.f, 0.f, 0.f);
+    //stworzenie jajka obracaj¹cego siê w okó³ g³ównego jajka 
+    egg = new Egg(static_cast<size_t>(this->resolution_main * SMALL_EGG_MULTIPLIER), Vector3f(0.f, -1.f, 0.f), Vector3f(0.3f, 0.3f, 0.3f));
+    //ustawienie koloru
+    egg->setColor(Egg::ColorType::Green);
+    //stworzenie systemu w którym jajko siê znajduje (jajko, promieñ, obrót wokó³ w³asnej osi na sekundê, obrót w okó³ promienia na sekundê) i dodanie go do listy systemów g³ównego systemu
+    this->mainSystem->push(new EggSystem(egg, 7.f, -40.f, 15.f));
+
+    //w zwi¹zku z sposobem, w jaki s¹ tworzone systemy jajek i jaka, mo¿liwe jest dodanie wielu systemów w wielu systemach, które kr¹¿¹ w okó³ siebie
 }
 //desturktor
 App::~App()
