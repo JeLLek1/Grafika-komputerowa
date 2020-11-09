@@ -31,6 +31,10 @@ private:
 	//wspó³czynnik szerokoœæ/wysokoœæ okna
 	App();
 public:
+	//usuwanie funkcjonalnoœci niepotrzebnych dla singletounu
+	App(App& other) = delete;
+	void operator=(const App&) = delete;
+
 	//typ wyœwietlania wszystkich jajek (chmura punktów, linie, pe³ne trójk¹ty) 
 	DrawType displayType = DEF_DISPLAY;
 	//obecny typ obrotu g³ównego systemu

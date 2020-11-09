@@ -19,5 +19,6 @@ int main(int argc, char** argv) {
     App::getInstance();
     // Funkcja uruchamia szkielet biblioteki GLUT
     glutMainLoop();
+
     return 0;
 }

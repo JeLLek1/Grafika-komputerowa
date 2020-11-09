@@ -24,6 +24,10 @@ private:
 	//konstruktor prywatny bo singleton
 	App();
 public:
+	//usuwanie funkcjonalnoœci niepotrzebnych dla singletounu
+	App(App& other) = delete;
+	void operator=(const App&) = delete;
+
 	//pdstêp czasowy miêdzy klatkami
 	double dt;
 
