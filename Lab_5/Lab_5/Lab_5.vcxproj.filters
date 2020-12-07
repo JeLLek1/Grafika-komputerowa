@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Pliki źródłowe">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Pliki zasobów">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\Structures">
+      <UniqueIdentifier>{a8392c0c-f8b2-4f1b-a992-c4ffe85bcc4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\View">
+      <UniqueIdentifier>{78acd19d-c4b1-4fc2-8047-030b37af24be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\View">
+      <UniqueIdentifier>{6ff2a70a-3439-46e7-88fb-d0c5cdd38dfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\Structures">
+      <UniqueIdentifier>{b72649e9-d5f1-43b0-aba0-3b0621435ca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\Structures\Textures">
+      <UniqueIdentifier>{4be632db-1ba2-43e1-bf4e-cc33902706e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\Structures\Textures">
+      <UniqueIdentifier>{73d4cee5-dc4e-4a1c-9ac8-76a6efc34186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki źródłowe\Structures\Vectors">
+      <UniqueIdentifier>{005de8d4-b7f2-4497-bc5b-0b6fa804e3d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pliki nagłówkowe\Structures\Vectors">
+      <UniqueIdentifier>{d3c5f299-a5ab-4deb-a7cf-06c2bfc301c5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Lab_5.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Pliki źródłowe\View</Filter>
+    </ClCompile>
+    <ClCompile Include="CirculatingLight.cpp">
+      <Filter>Pliki źródłowe\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Pliki źródłowe\View</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingLight.cpp">
+      <Filter>Pliki źródłowe\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Pliki źródłowe\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="EggSystem.cpp">
+      <Filter>Pliki źródłowe\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Egg.cpp">
+      <Filter>Pliki źródłowe\Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Pliki źródłowe\Structures\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector4.cpp">
+      <Filter>Pliki źródłowe\Structures\Vectors</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Pliki źródłowe\Structures\Vectors</Filter>
+    </ClCompile>
+    <ClCompile Include="Point3f.cpp">
+      <Filter>Pliki źródłowe\Structures\Vectors</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawType.h">
+      <Filter>Pliki nagłówkowe\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Pliki nagłówkowe\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Pliki nagłówkowe\View</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingLight.h">
+      <Filter>Pliki nagłówkowe\View</Filter>
+    </ClInclude>
+    <ClInclude Include="CirculatingLight.h">
+      <Filter>Pliki nagłówkowe\View</Filter>
+    </ClInclude>
+    <ClInclude Include="EggSystem.h">
+      <Filter>Pliki nagłówkowe\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Egg.h">
+      <Filter>Pliki nagłówkowe\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="RotationDirection.h">
+      <Filter>Pliki nagłówkowe\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Pliki nagłówkowe\Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Pliki nagłówkowe\Structures\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Point3f.h">
+      <Filter>Pliki nagłówkowe\Structures\Vectors</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Pliki nagłówkowe\Structures\Vectors</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>Pliki nagłówkowe\Structures\Vectors</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Vector3.inl">
+      <Filter>Pliki nagłówkowe\Structures\Vectors</Filter>
+    </None>
+    <None Include="Vector4.inl">
+      <Filter>Pliki nagłówkowe\Structures\Vectors</Filter>
+    </None>
+  </ItemGroup>
+</Project>
