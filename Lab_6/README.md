@@ -8,4 +8,4 @@
 * w folderze js/ znajduje się zminifikowana i uruchamiana przez stronę wersja skryptu
 * shader, który jest w pliku index.html jest skopiowanym z THREE.js shaderem modelu phonga, z dorzuconym wycinaniem sfery w obiektach
 * tekstura została użyta na szklanej kuli (aby urealnić jej wygląd narzucana jest na nią tekstura nieba)
-* [Link do strony aplikacji](https://jellek1.github.io/Grafika-komputerowa/)
+* [Link do strony aplikacji](https://jellek1.github.io/Grafika-komputerowa/) (Obecnie działa na firefox)
